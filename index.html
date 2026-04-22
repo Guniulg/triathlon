@@ -46,19 +46,32 @@ button:active{opacity:.7;}
 #btn-mode:active{background:rgba(255,255,255,.3);}
 #btn-mode.marathon-active{background:rgba(255,255,255,.9);color:#0C447C;}
 /* NAV */
-.tab-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--surface);border-top:1px solid var(--border);display:flex;padding:5px 4px;padding-bottom:calc(5px + env(safe-area-inset-bottom,0px));gap:2px;}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 2px 4px;cursor:pointer;background:none;border:none;border-radius:10px;color:#888;font-size:9px;font-weight:700;font-family:inherit;gap:3px;letter-spacing:.02em;transition:all .18s;-webkit-tap-highlight-color:transparent;min-width:0;}
-.tab-btn .tab-icon{width:40px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:all .18s;background:#e8e8e8;}
-.tab-btn svg{width:19px;height:19px;flex-shrink:0;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:all .18s;stroke:#888;}
-.tab-btn.on{color:var(--run);}
-.tab-btn.on .tab-icon{background:var(--runbg);transform:scale(1.08);}
-.tab-btn.on svg{stroke:var(--run);}
-.tab-btn.save-t .tab-icon{background:#ede9fe;}
-.tab-btn.save-t svg{stroke:var(--purple);}
-.tab-btn.save-t{color:var(--purple);}
-.tab-btn.save-t.on .tab-icon{background:#ddd6fe;transform:scale(1.08);}
-.tab-btn.save-t.on svg{stroke:var(--purple);}
-@media (prefers-color-scheme:dark){.tab-btn .tab-icon{background:#2a2a2a;}.tab-btn svg{stroke:#aaa;}.tab-btn{color:#aaa;}.tab-btn.save-t .tab-icon{background:#2d2040;}}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--surface);border-top:1px solid var(--border);display:flex;padding:6px 3px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));gap:2px;}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 2px 4px;cursor:pointer;background:none;border:none;border-radius:10px;color:#999;font-size:10px;font-weight:700;font-family:inherit;gap:3px;letter-spacing:.01em;transition:all .18s;-webkit-tap-highlight-color:transparent;min-width:0;}
+.tab-btn .tab-icon{width:42px;height:32px;border-radius:11px;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.tab-btn svg{width:20px;height:20px;flex-shrink:0;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:all .18s;}
+.tab-btn.on{transform:none;}
+.tab-btn.on .tab-icon{transform:scale(1.06);}
+/* Couleurs inactives — icone colorée douce */
+.t-dash .tab-icon{background:#dbeafe;} .t-dash svg{stroke:#2563EB;} .t-dash{color:#2563EB;}
+.t-hist .tab-icon{background:#d1fae5;} .t-hist svg{stroke:#059669;} .t-hist{color:#059669;}
+.t-plan .tab-icon{background:#fef3c7;} .t-plan svg{stroke:#D97706;} .t-plan{color:#D97706;}
+.t-meteo .tab-icon{background:#e0f2fe;} .t-meteo svg{stroke:#0284C7;} .t-meteo{color:#0284C7;}
+.t-sleep .tab-icon{background:#ede9fe;} .t-sleep svg{stroke:#7C3AED;} .t-sleep{color:#7C3AED;}
+.t-stat .tab-icon{background:#fce7f3;} .t-stat svg{stroke:#DB2777;} .t-stat{color:#DB2777;}
+.t-save .tab-icon{background:#fee2e2;} .t-save svg{stroke:#DC2626;} .t-save{color:#DC2626;}
+/* Couleurs actives — fond plein */
+.t-dash.on .tab-icon{background:#2563EB;} .t-dash.on svg{stroke:#fff;} .t-dash.on{color:#2563EB;}
+.t-hist.on .tab-icon{background:#059669;} .t-hist.on svg{stroke:#fff;} .t-hist.on{color:#059669;}
+.t-plan.on .tab-icon{background:#D97706;} .t-plan.on svg{stroke:#fff;} .t-plan.on{color:#D97706;}
+.t-meteo.on .tab-icon{background:#0284C7;} .t-meteo.on svg{stroke:#fff;} .t-meteo.on{color:#0284C7;}
+.t-sleep.on .tab-icon{background:#7C3AED;} .t-sleep.on svg{stroke:#fff;} .t-sleep.on{color:#7C3AED;}
+.t-stat.on .tab-icon{background:#DB2777;} .t-stat.on svg{stroke:#fff;} .t-stat.on{color:#DB2777;}
+.t-save.on .tab-icon{background:#DC2626;} .t-save.on svg{stroke:#fff;} .t-save.on{color:#DC2626;}
+@media(prefers-color-scheme:dark){
+.t-dash .tab-icon{background:#1e3a5f;} .t-hist .tab-icon{background:#064e3b;} .t-plan .tab-icon{background:#451a03;}
+.t-meteo .tab-icon{background:#0c4a6e;} .t-sleep .tab-icon{background:#2e1065;} .t-stat .tab-icon{background:#500724;} .t-save .tab-icon{background:#450a0a;}
+.tab-btn{color:#bbb;}}
 
 /* PAGES */
 .pg{display:none;padding:14px 12px calc(80px + env(safe-area-inset-bottom,0px));animation:fadeUp .18s ease;}
@@ -267,31 +280,31 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 <body>
 
 <div class="tab-bar" id="nav">
-  <button class="tab-btn on" data-pg="dash">
+  <button class="tab-btn t-dash on" data-pg="dash">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
     Accueil
   </button>
-  <button class="tab-btn" data-pg="hist">
+  <button class="tab-btn t-hist" data-pg="hist">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 15,15"/></svg></div>
     Historique
   </button>
-  <button class="tab-btn" data-pg="plan">
+  <button class="tab-btn t-plan" data-pg="plan">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
     Planning
   </button>
-  <button class="tab-btn" data-pg="meteo">
+  <button class="tab-btn t-meteo" data-pg="meteo">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
     Météo
   </button>
-  <button class="tab-btn" data-pg="sleep">
+  <button class="tab-btn t-sleep" data-pg="sleep">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
     Sommeil
   </button>
-  <button class="tab-btn" data-pg="stat">
+  <button class="tab-btn t-stat" data-pg="stat">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
     Stats
   </button>
-  <button class="tab-btn save-t" data-pg="save">
+  <button class="tab-btn t-save" data-pg="save">
     <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg></div>
     Sauvegarde
   </button>
@@ -718,7 +731,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 </div>
 
 <script>
-var STORAGE_KEY='triathlon_v36';
+var STORAGE_KEY='triathlon_v37';
 var RACE=new Date('2026-07-26'),START=new Date('2026-04-06');
 var MARATHON=new Date('2026-12-06'),MSTART=new Date('2026-09-07');
 var MODE='tri'; // 'tri' or 'marathon'
