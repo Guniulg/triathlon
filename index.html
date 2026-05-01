@@ -731,7 +731,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 </div>
 
 <script>
-var STORAGE_KEY='triathlon_v37';
+var STORAGE_KEY='triathlon_v38';
 var RACE=new Date('2026-07-26'),START=new Date('2026-04-06');
 var MARATHON=new Date('2026-12-06'),MSTART=new Date('2026-09-07');
 var MODE='tri'; // 'tri' or 'marathon'
@@ -1469,7 +1469,8 @@ function renderSessions(cid,wi){
     var info=document.createElement('div');info.className='sinfo';
     var rmForDay=sessionsByDay[s.j]&&sessionsByDay[s.j].find(function(x){return x.t==='rm';});
     var rmBadge=rmForDay&&s.t!=='rm'?'<span style="font-size:9px;background:var(--rmbg);color:var(--rm);padding:1px 5px;border-radius:6px;margin-left:5px;border:1px solid var(--rmbdr);">+RM 10min</span>':'';
-    info.innerHTML='<div class="sday">'+DN[s.j]+rmBadge+'</div>';
+    var dateOvr=n&&n.dateOverride?'<span style="font-size:10px;background:var(--surface2);color:var(--text3);padding:1px 7px;border-radius:6px;margin-left:5px;border:1px solid var(--border);">📅 '+n.dateOverride+'</span>':'';
+    info.innerHTML='<div class="sday">'+DN[s.j]+rmBadge+dateOvr+'</div>';
     var btns=document.createElement('div');btns.className='sbtns';
     var dp=document.createElement('button');dp.className='pill'+(dn?' done':'');
     dp.innerHTML=dn?'✓ Faite':'Marquer faite';
@@ -1523,7 +1524,16 @@ function renderSessions(cid,wi){
     if(isOpen){
       var n=getNote(wi,s.j),feeling=n.feeling||'';
       var jf=document.createElement('div');jf.className='jform';
-      jf.innerHTML='<div class="jform-title">'+s.n+' · '+DN[s.j]+' · '+W[wi].d+'</div>'
+      // Calculate default session date from week start + day offset
+    var weekStartStr=W[wi].d; // e.g. "6 avr" 
+    var sessionDateISO=n.dateOverride||(function(){
+      // Try to compute ISO date from week index
+      var ws=new Date(START.getTime()+wi*7*86400000);
+      ws.setDate(ws.getDate()+s.j); // add day offset (0=Mon)
+      return ws.toISOString().split('T')[0];
+    })();
+    jf.innerHTML='<div class="jform-title">'+s.n+' · '+DN[s.j]+' · '+W[wi].d+'</div>'
+      +'<div class="finrow" style="margin-bottom:8px;"><div><div class="fl">Date réelle de la séance</div><input type="date" class="j-date" value="'+sessionDateISO+'"></div><div></div></div>'
         +'<div class="gpx-zone" id="gpx-zone-'+k+'" ondragover="this.classList.add(\'drag\')" ondragleave="this.classList.remove(\'drag\')" ondrop="this.classList.remove(\'drag\')">'
         +'<input type="file" accept=".gpx" id="gpx-inp-'+k+'">'
         +'<div class="gpx-zone-txt">📂 <strong>Importer un fichier GPX</strong> — glisse ou clique pour charger tes stats</div>'
@@ -1538,7 +1548,7 @@ function renderSessions(cid,wi){
       jf.querySelectorAll('[data-f]').forEach(function(btn){
         (function(k_,wi_,cid_,f_){btn.onclick=function(){if(!ST.notes[k_])ST.notes[k_]={};ST.notes[k_].feeling=f_;openJ[k_]=true;saveST();renderSessions(cid_,wi_);};})(k,wi,cid,btn.getAttribute('data-f'));
       });
-      (function(k_,wi_,cid_,jf_){jf_.querySelector('.j-save').onclick=function(){if(!ST.notes[k_])ST.notes[k_]={};var fc=jf_.querySelector('.j-fc'),dr=jf_.querySelector('.j-dur'),tx=jf_.querySelector('.j-txt');if(fc)ST.notes[k_].fc=fc.value;if(dr)ST.notes[k_].dur=dr.value;if(tx)ST.notes[k_].text=tx.value;openJ[k_]=false;saveST();renderSessions(cid_,wi_);if(cid_==='d-sessions')rDash();};})(k,wi,cid,jf);
+      (function(k_,wi_,cid_,jf_){jf_.querySelector('.j-save').onclick=function(){if(!ST.notes[k_])ST.notes[k_]={};var fc=jf_.querySelector('.j-fc'),dr=jf_.querySelector('.j-dur'),tx=jf_.querySelector('.j-txt');if(fc)ST.notes[k_].fc=fc.value;if(dr)ST.notes[k_].dur=dr.value;if(tx)ST.notes[k_].text=tx.value;var dt=jf_.querySelector('.j-date');if(dt&&dt.value)ST.notes[k_].dateOverride=dt.value;openJ[k_]=false;saveST();renderSessions(cid_,wi_);if(cid_==='d-sessions')rDash();};})(k,wi,cid,jf);
       var delBtn=jf.querySelector('.j-del');
       if(delBtn)(function(k_,wi_,cid_){delBtn.onclick=function(){delete ST.notes[k_];openJ[k_]=false;saveST();renderSessions(cid_,wi_);if(cid_==='d-sessions')rDash();};})(k,wi,cid);
       el.appendChild(jf);
